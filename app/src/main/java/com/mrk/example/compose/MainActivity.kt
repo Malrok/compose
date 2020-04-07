@@ -3,14 +3,12 @@ package com.mrk.example.compose
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
 import androidx.compose.Providers
 import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.mrk.example.compose.effects.observe
-import com.mrk.example.compose.ui.usersList
+import com.mrk.example.compose.ambients.ViewModelAmbient
+import com.mrk.example.compose.navigation.Root
 import com.mrk.example.compose.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -24,9 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 Providers(
-                    AmbientBackPressHandler provides backPressHandler
+//                    AmbientBackPressHandler provides backPressHandler,
+                    ViewModelAmbient provides mainViewModel
                 ) {
-                    main(mainViewModel)
+                    Root.Content()
                 }
             }
         }
@@ -37,11 +36,4 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-}
-
-@Composable
-fun main(mainViewModel: MainViewModel) {
-    val users = observe(data = mainViewModel.getUsers())
-
-    usersList(users = users)
 }

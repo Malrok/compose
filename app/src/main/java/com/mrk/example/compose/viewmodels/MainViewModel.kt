@@ -5,20 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.moventes.moventest.android.models.User
+import com.mrk.example.compose.models.FirestoreQuery
 
 class MainViewModel : ViewModel() {
     private var db = FirebaseFirestore.getInstance()
 
-    private val users: MutableLiveData<List<User>> by lazy {
+    private val usersQuery: MutableLiveData<FirestoreQuery<User>> by lazy {
         return@lazy loadUsers()
     }
 
-    fun getUsers(): LiveData<List<User>> {
-        return users
+    fun getUsers(): LiveData<FirestoreQuery<User>> {
+        return usersQuery
     }
 
-    private fun loadUsers(): MutableLiveData<List<User>> {
-        val data = MutableLiveData<List<User>>()
+    private fun loadUsers(): MutableLiveData<FirestoreQuery<User>> {
+        val data = MutableLiveData<FirestoreQuery<User>>()
 
         this.db
             .collection("users")
@@ -30,7 +31,9 @@ class MainViewModel : ViewModel() {
                     for (document in task.result!!) {
                         users.add(document.toObject(User::class.java))
                     }
-                    data.value = users
+                    data.value = FirestoreQuery(loading = false, data = users)
+                } else {
+                    data.value = FirestoreQuery(loading = false, error = true)
                 }
             }
 

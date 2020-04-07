@@ -8,7 +8,6 @@ import androidx.compose.state
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
 import androidx.ui.graphics.asImageAsset
 import androidx.ui.layout.preferredSize
 import androidx.ui.unit.Dp
@@ -44,8 +43,6 @@ fun ImageNetwork(url: String?, width: Dp, height: Dp) {
     Box(modifier = Modifier.preferredSize(width, height)) {
         if (image.value != null) {
             Image(image.value!!.asImageAsset())
-        } else {
-            Text("loading...")
         }
     }
 }
