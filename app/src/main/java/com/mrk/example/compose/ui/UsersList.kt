@@ -17,7 +17,7 @@ import androidx.ui.material.TopAppBar
 import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.unit.Dp
-import com.moventes.moventest.android.models.User
+import com.mrk.example.compose.models.User
 import com.mrk.example.compose.R
 import com.mrk.example.compose.ambients.ViewModelAmbient
 import com.mrk.example.compose.effects.observe
@@ -66,7 +66,7 @@ fun usersList() {
 fun usersListItem(user: User) {
     Clickable(
         onClick = {
-            Log.d("clicked", user.first_name!!)
+            Log.d("clicked", user.id + " " + user.first_name!!)
         },
         modifier = Modifier.ripple()
     ) {

@@ -1,7 +1,8 @@
-package com.moventes.moventest.android.models
+package com.mrk.example.compose.models
 
 class User {
 
+    var id: String? = null
     var first_name: String? = null
     var last_name: String? = null
     var description: String? = null

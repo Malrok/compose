@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.moventes.moventest.android.models.User
+import com.mrk.example.compose.models.User
 import com.mrk.example.compose.models.FirestoreQuery
 
 class MainViewModel : ViewModel() {
@@ -29,7 +29,9 @@ class MainViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val users = ArrayList<User>()
                     for (document in task.result!!) {
-                        users.add(document.toObject(User::class.java))
+                        val user = document.toObject(User::class.java)
+                        user.id = document.id
+                        users.add(user)
                     }
                     data.value = FirestoreQuery(loading = false, data = users)
                 } else {
