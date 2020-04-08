@@ -4,16 +4,13 @@ import android.util.Log
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.AdapterList
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.Text
+import androidx.ui.foundation.*
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.wrapContentSize
-import androidx.ui.material.CircularProgressIndicator
-import androidx.ui.material.ListItem
-import androidx.ui.material.Scaffold
-import androidx.ui.material.TopAppBar
+import androidx.ui.material.*
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Add
 import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
 import androidx.ui.unit.Dp
@@ -21,6 +18,8 @@ import com.mrk.example.compose.models.User
 import com.mrk.example.compose.R
 import com.mrk.example.compose.ambients.ViewModelAmbient
 import com.mrk.example.compose.effects.observe
+import com.mrk.example.compose.navigation.Root
+import com.mrk.example.compose.navigation.navigateTo
 
 interface UsersList {
     companion object {
@@ -34,7 +33,18 @@ interface UsersList {
                 },
                 bodyContent = {
                     usersList()
-                }
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { navigateTo(Root.Routing.Detail("-1")) },
+                        shape = RoundedCornerShape(50)
+                    ) {
+                       IconButton(onClick = {}) {
+                           Icon(Icons.Filled.Add)
+                       } 
+                    }
+                },
+                floatingActionButtonPosition = Scaffold.FabPosition.End
             )
         }
     }
@@ -67,6 +77,7 @@ fun usersListItem(user: User) {
     Clickable(
         onClick = {
             Log.d("clicked", user.id + " " + user.first_name!!)
+            navigateTo(Root.Routing.Detail(user.id!!))
         },
         modifier = Modifier.ripple()
     ) {

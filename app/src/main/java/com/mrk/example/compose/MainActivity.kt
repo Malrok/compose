@@ -6,14 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Providers
 import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
-import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.mrk.example.compose.ambients.ViewModelAmbient
+import com.mrk.example.compose.navigation.NavigationStatus
 import com.mrk.example.compose.navigation.Root
+import com.mrk.example.compose.navigation.navigateTo
 import com.mrk.example.compose.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
-    private val backPressHandler = BackPressHandler()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 Providers(
-//                    AmbientBackPressHandler provides backPressHandler,
                     ViewModelAmbient provides mainViewModel
                 ) {
                     Root.Content()
@@ -32,7 +30,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!backPressHandler.handle()) {
+        if (NavigationStatus.currentScreen is Root.Routing.Detail) {
+            navigateTo(Root.Routing.List)
+        } else {
             super.onBackPressed()
         }
     }
