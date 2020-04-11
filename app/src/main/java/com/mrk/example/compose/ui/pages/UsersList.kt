@@ -1,6 +1,5 @@
-package com.mrk.example.compose.ui
+package com.mrk.example.compose.ui.pages
 
-import android.util.Log
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
@@ -13,13 +12,14 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Add
 import androidx.ui.material.ripple.ripple
 import androidx.ui.res.stringResource
-import androidx.ui.unit.Dp
-import com.mrk.example.compose.models.User
+import androidx.ui.unit.dp
 import com.mrk.example.compose.R
 import com.mrk.example.compose.ambients.ViewModelAmbient
 import com.mrk.example.compose.effects.observe
+import com.mrk.example.compose.models.UserModel
 import com.mrk.example.compose.navigation.Root
 import com.mrk.example.compose.navigation.navigateTo
+import com.mrk.example.compose.ui.components.ImageNetwork
 
 interface UsersList {
     companion object {
@@ -28,7 +28,7 @@ interface UsersList {
             Scaffold(
                 topAppBar = {
                     TopAppBar(title = {
-                        Text(stringResource(id = R.string.app_name))
+                        Text(stringResource(id = R.string.list_title))
                     })
                 },
                 bodyContent = {
@@ -73,20 +73,23 @@ fun usersList() {
 }
 
 @Composable
-fun usersListItem(user: User) {
+fun usersListItem(user: UserModel) {
     Clickable(
         onClick = {
-            Log.d("clicked", user.id + " " + user.first_name!!)
             navigateTo(Root.Routing.Detail(user.id!!))
         },
         modifier = Modifier.ripple()
     ) {
         ListItem(
             icon = {
-                ImageNetwork(url = user.picture, width = Dp(64f), height = Dp(64f))
+                ImageNetwork(
+                    url = user.picture,
+                    width = 64.dp,
+                    height = 64.dp
+                )
             },
             text = {
-                Text(text = "${user.first_name} ${user.last_name}")
+                Text(text = "${user.firstName} ${user.lastName}")
             }
         )
     }

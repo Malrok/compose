@@ -2,8 +2,9 @@ package com.mrk.example.compose.navigation
 
 import androidx.compose.Composable
 import androidx.compose.Model
-import com.mrk.example.compose.ui.UserDetail
-import com.mrk.example.compose.ui.UsersList
+import androidx.ui.animation.Crossfade
+import com.mrk.example.compose.ui.pages.UserDetail
+import com.mrk.example.compose.ui.pages.UsersList
 
 interface Root {
     sealed class Routing {
@@ -14,13 +15,12 @@ interface Root {
     companion object {
         @Composable
         fun Content() {
-            when (NavigationStatus.currentScreen) {
-                is Routing.List -> UsersList.Content()
-                is Routing.Detail -> UserDetail.Content(
-                    id = (NavigationStatus.currentScreen as Routing.Detail).id
-                )
+            Crossfade(current = NavigationStatus.currentScreen) { screen ->
+                when (screen) {
+                    is Routing.List -> UsersList.Content()
+                    is Routing.Detail -> UserDetail.Content(id = screen.id)
+                }
             }
-
         }
     }
 }

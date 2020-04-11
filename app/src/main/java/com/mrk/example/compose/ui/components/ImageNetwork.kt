@@ -1,4 +1,4 @@
-package com.mrk.example.compose.ui
+package com.mrk.example.compose.ui.components
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

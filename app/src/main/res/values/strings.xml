@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">compose</string>
+    <string name="list_title">User\' list</string>
+    <string name="detail_title">User detail</string>
+    <string name="validate_action">Validate</string>
 </resources>
