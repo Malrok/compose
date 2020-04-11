@@ -36,10 +36,14 @@ interface UsersList {
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { navigateTo(Root.Routing.Detail("-1")) },
+                        onClick = { },
                         shape = RoundedCornerShape(50)
                     ) {
-                       IconButton(onClick = {}) {
+                       IconButton(
+                           onClick = {
+                               navigateTo(Root.Routing.Detail("-1"))
+                           }
+                       ) {
                            Icon(Icons.Filled.Add)
                        } 
                     }
