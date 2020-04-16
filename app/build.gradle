@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    def compose_version = "0.1.0-dev08"
+    def compose_version = "0.1.0-dev09"
     def lifecycle_version = "2.2.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -55,6 +55,7 @@ dependencies {
     implementation "androidx.ui:ui-layout:$compose_version"
     implementation "androidx.ui:ui-material:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
+    implementation "androidx.ui:ui-livedata:$compose_version"
 
     // viewmodels
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

@@ -1,14 +1,17 @@
-package com.mrk.example.compose.ui.pages
+package com.mrk.example.compose.pages
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.Composable
+import androidx.compose.getValue
 import androidx.compose.state
 import androidx.ui.core.Alignment
+import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Modifier
 import androidx.ui.core.tag
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.*
 import androidx.ui.layout.*
+import androidx.ui.livedata.observeAsState
 import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.material.Scaffold
 import androidx.ui.material.TextButton
@@ -16,15 +19,16 @@ import androidx.ui.material.TopAppBar
 import androidx.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
+import com.mrk.example.compose.PICK_IMAGE
 import com.mrk.example.compose.R
 import com.mrk.example.compose.ambients.ViewModelAmbient
-import com.mrk.example.compose.effects.observe
+import com.mrk.example.compose.components.EditTextField
+import com.mrk.example.compose.components.IconButton
+import com.mrk.example.compose.components.ImageNetwork
 import com.mrk.example.compose.models.FirestoreQuery
 import com.mrk.example.compose.models.UserModel
 import com.mrk.example.compose.navigation.Root
 import com.mrk.example.compose.navigation.navigateTo
-import com.mrk.example.compose.ui.components.EditTextField
-import com.mrk.example.compose.ui.components.IconButton
 import com.mrk.example.compose.viewmodels.MainViewModel
 
 interface UserDetail {
@@ -32,16 +36,18 @@ interface UserDetail {
         @Composable
         fun Content(id: String) {
             val viewModel = ViewModelAmbient.current
-            val query = observe(data = viewModel.getUserById(id))
+            val query by viewModel.getUserById(id).observeAsState()
 
             Scaffold(
                 topAppBar = {
                     TopAppBar(
                         title = {
-                            if (query != null && !query.loading) {
-                                Text("${query.data.firstName} ${query.data.lastName}")
-                            } else {
-                                Text(stringResource(id = R.string.detail_title))
+                            query.let {
+                                if (it != null && !it.loading) {
+                                    Text("${it.data.firstName} ${it.data.lastName}")
+                                } else {
+                                    Text(stringResource(id = R.string.detail_title))
+                                }
                             }
                         },
                         navigationIcon = {
@@ -67,9 +73,10 @@ interface UserDetail {
 
 @Composable
 fun userDetail(query: FirestoreQuery<UserModel>?, viewModel: MainViewModel? = null) {
+    val activity = ContextAmbient.current as Activity
 
     if (query != null && !query.loading) {
-        val user = state { query.data }
+        val user by state { query.data }
 
         ConstraintLayout(
             constraintSet = ConstraintSet {
@@ -92,29 +99,39 @@ fun userDetail(query: FirestoreQuery<UserModel>?, viewModel: MainViewModel? = nu
                 modifier = Modifier.tag("scroller")
             ) {
                 Column {
+                    Clickable(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_PICK)
+                            intent.type = "image/*"
+                            activity.startActivityForResult(intent, PICK_IMAGE)
+                        }
+                    ) {
+                        ImageNetwork(url = user.picture, width = 128.dp, height = 128.dp)
+                    }
                     EditTextField(
-                        value = user.value.firstName,
+                        value = TextFieldValue(user.firstName),
                         onValueChange = {
-                            user.value.firstName = it
+                            user.firstName = it.text
                         }
                     )
                     EditTextField(
-                        value = user.value.lastName,
+                        value = TextFieldValue(user.lastName),
                         onValueChange = {
-                            user.value.lastName = it
+                            user.lastName = it.text
                         }
                     )
                     EditTextField(
-                        value = user.value.description,
+                        value = TextFieldValue(user.description),
                         onValueChange = {
-                            user.value.description = it
+                            user.description = it.text
                         }
                     )
                 }
             }
             TextButton(
                 onClick = {
-                    viewModel?.pushUser(user.value)?.observeForever {
+                    viewModel?.pushUser(user)?.observeForever {
                         navigateTo(Root.Routing.List)
                     }
                 },

@@ -3,8 +3,8 @@ package com.mrk.example.compose.navigation
 import androidx.compose.Composable
 import androidx.compose.Model
 import androidx.ui.animation.Crossfade
-import com.mrk.example.compose.ui.pages.UserDetail
-import com.mrk.example.compose.ui.pages.UsersList
+import com.mrk.example.compose.pages.UserDetail
+import com.mrk.example.compose.pages.UsersList
 
 interface Root {
     sealed class Routing {
